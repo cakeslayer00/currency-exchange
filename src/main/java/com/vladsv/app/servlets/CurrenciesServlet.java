@@ -1,9 +1,12 @@
 package com.vladsv.app.servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vladsv.app.exceptions.CurrencyCodeAlreadyExistsException;
+import com.vladsv.app.exceptions.RequiredFieldMissingException;
 import com.vladsv.app.models.Currency;
 import com.vladsv.app.repositories.impl.CurrencyRepository;
-import com.vladsv.app.utils.ValidationHelper;
+import com.vladsv.app.utils.Validator;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,38 +15,38 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @WebServlet(value = "/currencies")
 public class CurrenciesServlet extends HttpServlet {
     private final CurrencyRepository currencyRepository = new CurrencyRepository();
-    private final ValidationHelper helper = new ValidationHelper(currencyRepository);
+    private final Validator validator = new Validator(currencyRepository);
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            List<Currency> currencies = currencyRepository.findAll();
             resp.setContentType("application/json");
             resp.setCharacterEncoding("UTF-8");
-            resp.getWriter().write(new ObjectMapper()
-                    .writer()
-                    .withDefaultPrettyPrinter()
-                    .writeValueAsString(currencies));
+
+            List<Currency> currencies = currencyRepository.findAll();
+
+            resp.getWriter().write(new ObjectMapper().writeValueAsString(currencies));
         } catch (SQLException e) {
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            throw new RuntimeException(e);
+            validator.handle(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Database is unavailable");
         }
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            String name = helper.getField(resp, req.getParameter("name"));
-            String code = helper.getField(resp, req.getParameter("code"));
-            String sign = helper.getField(resp, req.getParameter("sign"));
-            helper.verifyCurrencyCode(resp, code);
-            helper.validateCurrencyCode(resp, code);
+            resp.setContentType("application/json");
+            resp.setCharacterEncoding("UTF-8");
+            resp.setStatus(HttpServletResponse.SC_CREATED);
+
+            String name = validator.getValidParameter(req.getParameter("name"));
+            String code = validator.getValidParameter(req.getParameter("code"));
+            String sign = validator.getValidParameter(req.getParameter("sign"));
+            validator.validateCurrencyCode(code);
+            validator.checkWhetherCurrencyCodeAlreadyExists(code);
 
             currencyRepository.save(Currency.builder()
                     .name(name)
@@ -51,11 +54,12 @@ public class CurrenciesServlet extends HttpServlet {
                     .sign(sign)
                     .build());
 
+        } catch (IllegalArgumentException | RequiredFieldMissingException e) {
+            validator.handle(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         } catch (SQLException e) {
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            throw new RuntimeException(e);
+            validator.handle(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Database is unavailable");
+        } catch (CurrencyCodeAlreadyExistsException e) {
+            validator.handle(resp, HttpServletResponse.SC_CONFLICT, e.getMessage());
         }
     }
-
-
 }

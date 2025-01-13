@@ -56,7 +56,6 @@ public class CurrencyRepository implements CrudRepository<Currency> {
             while (rs.next()) {
                 currencies.add(getCurrency(rs));
             }
-
             return currencies;
         }
     }
