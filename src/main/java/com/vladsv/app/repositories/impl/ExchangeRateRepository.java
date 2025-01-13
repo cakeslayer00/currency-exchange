@@ -4,10 +4,11 @@ import com.vladsv.app.models.ExchangeRate;
 import com.vladsv.app.repositories.CrudRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ExchangeRateRepository implements CrudRepository<ExchangeRate> {
     @Override
-    public ExchangeRate findById(int id) {
+    public Optional<ExchangeRate> findById(int id) {
         return null;
     }
 
