@@ -67,8 +67,8 @@ public class ExchangeRatesServlet extends HttpServlet {
                     .baseCurrencyId(baseCurrency.getId())
                     .targetCurrencyId(targetCurrency.getId())
                     .rate(BigDecimal.valueOf(Double.parseDouble(rate)))
-                    .build());
-
+                    .build()
+            );
         } catch (IllegalArgumentException | RequiredFieldMissingException e) {
             handler.handle(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         } catch (SQLException e) {

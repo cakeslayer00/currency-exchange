@@ -46,7 +46,8 @@ public class CurrenciesServlet extends HttpServlet {
                     .name(name)
                     .code(code)
                     .sign(sign)
-                    .build());
+                    .build()
+            );
         } catch (IllegalArgumentException | RequiredFieldMissingException e) {
             handler.handle(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         } catch (SQLException e) {

@@ -67,7 +67,8 @@ public class ExchangeServlet extends HttpServlet {
             String targetCurrencyCode,
             BigDecimal amount,
             Currency baseCurrency,
-            Currency targetCurrency) throws SQLException, IOException {
+            Currency targetCurrency
+    ) throws SQLException, IOException {
         Optional<ExchangeRate> byBaseAndTargetCurrencyCode =
                 exchangeRateRepository.findByBaseAndTargetCurrencyCode(baseCurrencyCode, targetCurrencyCode);
 
