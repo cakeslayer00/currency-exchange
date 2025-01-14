@@ -7,11 +7,13 @@ import com.vladsv.app.repositories.impl.CurrencyRepository;
 public class ExchangeMapper {
     private final CurrencyRepository currencyRepository = new CurrencyRepository();
 
-    public ExchangeDto map(Currency base,
-                           Currency target,
-                           String rate,
-                           String amount,
-                           String convertedAmount) {
+    public ExchangeDto map(
+            Currency base,
+            Currency target,
+            String rate,
+            String amount,
+            String convertedAmount
+    ) {
         return ExchangeDto.builder()
                 .baseCurrency(base)
                 .targetCurrency(target)

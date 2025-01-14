@@ -50,7 +50,8 @@ public class ExchangeServlet extends HttpServlet {
                     targetCurrencyCode,
                     BigDecimal.valueOf(Double.parseDouble(amount)),
                     baseCurrency,
-                    targetCurrency);
+                    targetCurrency
+            );
         } catch (IllegalArgumentException | RequiredFieldMissingException e) {
             handler.handle(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         } catch (SQLException e) {
@@ -60,12 +61,13 @@ public class ExchangeServlet extends HttpServlet {
         }
     }
 
-    private void assembleResponse(HttpServletResponse resp,
-                                  String baseCurrencyCode,
-                                  String targetCurrencyCode,
-                                  BigDecimal amount,
-                                  Currency baseCurrency,
-                                  Currency targetCurrency) throws SQLException, IOException {
+    private void assembleResponse(
+            HttpServletResponse resp,
+            String baseCurrencyCode,
+            String targetCurrencyCode,
+            BigDecimal amount,
+            Currency baseCurrency,
+            Currency targetCurrency) throws SQLException, IOException {
         Optional<ExchangeRate> byBaseAndTargetCurrencyCode =
                 exchangeRateRepository.findByBaseAndTargetCurrencyCode(baseCurrencyCode, targetCurrencyCode);
 
@@ -100,7 +102,13 @@ public class ExchangeServlet extends HttpServlet {
         }
     }
 
-    private void createResponse(HttpServletResponse resp, BigDecimal rate, BigDecimal amount, Currency baseCurrency, Currency targetCurrency) throws IOException {
+    private void createResponse(
+            HttpServletResponse resp,
+            BigDecimal rate,
+            BigDecimal amount,
+            Currency baseCurrency,
+            Currency targetCurrency
+    ) throws IOException {
         BigDecimal res = rate.multiply(amount);
         resp.getWriter().write(new ObjectMapper().writeValueAsString(mapper.map(
                 baseCurrency,

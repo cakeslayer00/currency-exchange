@@ -15,9 +15,6 @@ public class ApplicationFilter implements Filter {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
 
-        request.setAttribute("CurrencyRepository", new CurrencyRepository());
-        request.setAttribute("ExchangeRateRepository", new ExchangeRateRepository());
-
         chain.doFilter(request, response);
     }
 }
