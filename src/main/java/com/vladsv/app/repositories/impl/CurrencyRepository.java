@@ -14,8 +14,7 @@ public class CurrencyRepository implements CrudRepository<Currency> {
     public Optional<Currency> findById(int id) throws SQLException {
         String query = "SELECT * FROM currencies WHERE id = ?";
         try (Connection conn = DataSource.getConnection();
-             PreparedStatement st = conn.prepareStatement(query);
-        ) {
+             PreparedStatement st = conn.prepareStatement(query)) {
             st.setInt(1, id);
             st.execute();
             ResultSet resultSet = st.getResultSet();
@@ -31,8 +30,7 @@ public class CurrencyRepository implements CrudRepository<Currency> {
         String query = "SELECT * FROM currencies WHERE code = ?";
 
         try (Connection conn = DataSource.getConnection();
-             PreparedStatement st = conn.prepareStatement(query);
-        ) {
+             PreparedStatement st = conn.prepareStatement(query)) {
             st.setString(1, code);
             st.execute();
             ResultSet resultSet = st.getResultSet();
@@ -50,8 +48,7 @@ public class CurrencyRepository implements CrudRepository<Currency> {
 
         try (Connection conn = DataSource.getConnection();
              Statement st = conn.createStatement();
-             ResultSet rs = st.executeQuery(query)
-        ) {
+             ResultSet rs = st.executeQuery(query)) {
             List<Currency> currencies = new ArrayList<>();
             while (rs.next()) {
                 currencies.add(getCurrency(rs));
@@ -65,8 +62,7 @@ public class CurrencyRepository implements CrudRepository<Currency> {
         String query = "INSERT INTO currencies(full_name,code,sign) VALUES(?, ?, ?)";
 
         try (Connection conn = DataSource.getConnection();
-             PreparedStatement st = conn.prepareStatement(query);
-        ) {
+             PreparedStatement st = conn.prepareStatement(query)) {
             st.setString(1, currency.getName());
             st.setString(2, currency.getCode());
             st.setString(3, currency.getSign());
@@ -94,6 +90,7 @@ public class CurrencyRepository implements CrudRepository<Currency> {
                 .id(id)
                 .code(code)
                 .name(name)
-                .sign(sign).build();
+                .sign(sign)
+                .build();
     }
 }
