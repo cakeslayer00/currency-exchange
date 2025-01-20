@@ -10,6 +10,5 @@ import lombok.Setter;
 @Setter
 @Builder
 public class AcknowledgmentDto {
-    private Integer httpResponseCode;
-    private String httpResponseMessage;
+    private String message;
 }

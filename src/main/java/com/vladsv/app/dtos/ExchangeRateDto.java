@@ -1,13 +1,11 @@
 package com.vladsv.app.dtos;
 
 import com.vladsv.app.models.Currency;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter

@@ -4,9 +4,10 @@ import lombok.*;
 
 import java.math.BigDecimal;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
 @Builder
 public class ExchangeRate {
     private Integer id;

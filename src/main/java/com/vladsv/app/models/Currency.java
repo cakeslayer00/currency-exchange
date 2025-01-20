@@ -2,9 +2,10 @@ package com.vladsv.app.models;
 
 import lombok.*;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
 @Builder
 public class Currency {
     private Integer id;

@@ -11,8 +11,7 @@ public class ExceptionHandler {
         resp.setStatus(httpStatusCode);
         resp.getWriter().write(new ObjectMapper().writeValueAsString(
                 AcknowledgmentDto.builder()
-                        .httpResponseCode(httpStatusCode)
-                        .httpResponseMessage(message)
+                        .message(message)
                         .build()
         ));
     }

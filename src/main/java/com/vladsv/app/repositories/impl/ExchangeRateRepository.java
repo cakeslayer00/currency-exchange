@@ -1,5 +1,7 @@
 package com.vladsv.app.repositories.impl;
 
+import com.vladsv.app.exceptions.CurrencyDoesNotExistsException;
+import com.vladsv.app.models.Currency;
 import com.vladsv.app.models.ExchangeRate;
 import com.vladsv.app.repositories.CrudRepository;
 import com.vladsv.app.utils.DataSource;
@@ -14,19 +16,23 @@ public class ExchangeRateRepository implements CrudRepository<ExchangeRate> {
 
     @Override
     public Optional<ExchangeRate> findById(int id) throws SQLException {
-        return null;
+        return Optional.empty();
     }
 
-    @SuppressWarnings("OptionalGetWithoutIsPresent")
-    public Optional<ExchangeRate> findByBaseAndTargetCurrencyCode(String base, String target) throws SQLException {
-        //тут можно было бы добавить поле ExchangeRateCode в бд и не париться
+    public Optional<ExchangeRate> findByCurrencyCodePair(String base, String target) throws SQLException {
         String query = "SELECT * FROM exchange_rates WHERE base_currency_id = ? AND target_currency_id = ?";
-        try (Connection conn = DataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+        try (Connection conn = DataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
             CurrencyRepository currencyRepository = new CurrencyRepository();
 
-            stmt.setInt(1, currencyRepository.findByCode(base).get().getId());
-            stmt.setInt(2, currencyRepository.findByCode(target).get().getId());
+            Currency baseCurrency = currencyRepository.findByCode(base).orElseThrow(
+                    () -> new CurrencyDoesNotExistsException(String.format("Currency with code '%s' not found", base))
+            );
+            Currency targetCurrency = currencyRepository.findByCode(target).orElseThrow(
+                    () -> new CurrencyDoesNotExistsException(String.format("Currency with code '%s' not found", target))
+            );
+
+            stmt.setInt(1, baseCurrency.getId());
+            stmt.setInt(2, targetCurrency.getId());
             stmt.execute();
             ResultSet rs = stmt.getResultSet();
 
@@ -40,9 +46,7 @@ public class ExchangeRateRepository implements CrudRepository<ExchangeRate> {
     @Override
     public List<ExchangeRate> findAll() throws SQLException {
         String query = "SELECT * FROM exchange_rates";
-        try (Connection connection = DataSource.getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(query)) {
+        try (Connection connection = DataSource.getConnection(); Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(query)) {
             List<ExchangeRate> exchangeRates = new ArrayList<>();
             while (resultSet.next()) {
                 exchangeRates.add(getExchangeRate(resultSet));
@@ -54,8 +58,7 @@ public class ExchangeRateRepository implements CrudRepository<ExchangeRate> {
     @Override
     public void save(ExchangeRate exchangeRate) throws SQLException {
         String query = "INSERT INTO exchange_rates(base_currency_id, target_currency_id, rate) VALUES(?, ?, ?)";
-        try (Connection conn = DataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+        try (Connection conn = DataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, exchangeRate.getBaseCurrencyId());
             stmt.setInt(2, exchangeRate.getTargetCurrencyId());
             stmt.setBigDecimal(3, exchangeRate.getRate());
@@ -66,8 +69,7 @@ public class ExchangeRateRepository implements CrudRepository<ExchangeRate> {
     @Override
     public void update(ExchangeRate exchangeRate) throws SQLException {
         String query = "UPDATE exchange_rates SET rate = ? WHERE id = ?";
-        try (Connection conn = DataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+        try (Connection conn = DataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setBigDecimal(1, exchangeRate.getRate());
             stmt.setInt(2, exchangeRate.getId());
             stmt.execute();
@@ -85,11 +87,6 @@ public class ExchangeRateRepository implements CrudRepository<ExchangeRate> {
         int targetCurrencyId = resultSet.getInt("target_currency_id");
         BigDecimal rate = resultSet.getBigDecimal("rate");
 
-        return ExchangeRate.builder()
-                .id(id)
-                .baseCurrencyId(baseCurrencyId)
-                .targetCurrencyId(targetCurrencyId)
-                .rate(rate)
-                .build();
+        return ExchangeRate.builder().id(id).baseCurrencyId(baseCurrencyId).targetCurrencyId(targetCurrencyId).rate(rate).build();
     }
 }
