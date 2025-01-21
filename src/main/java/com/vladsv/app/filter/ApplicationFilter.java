@@ -1,9 +1,8 @@
 package com.vladsv.app.filter;
 
-import com.vladsv.app.repositories.impl.CurrencyRepository;
-import com.vladsv.app.repositories.impl.ExchangeRateRepository;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
@@ -14,6 +13,9 @@ public class ApplicationFilter implements Filter {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
+
+        ((HttpServletResponse)response).addHeader("Access-Control-Allow-Origin", "*");
+        ((HttpServletResponse)response).addHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, HEAD, PATCH");
 
         chain.doFilter(request, response);
     }
