@@ -32,10 +32,10 @@ public class CurrencyServlet extends HttpServlet {
             Currency currency = validator.getExistingCurrency(currencyRepository, code);
 
             resp.getWriter().write(new ObjectMapper().writeValueAsString(currency));
-        } catch (RequiredParamMissingException | IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             handler.handle(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         } catch (SQLException e) {
-            handler.handle(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+            handler.handleSQLException(resp, e);
         } catch (NoSuchElementException e) {
             handler.handle(resp, HttpServletResponse.SC_NOT_FOUND, e.getMessage());
         }

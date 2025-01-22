@@ -37,10 +37,10 @@ public class ExchangeRateServlet extends HttpServlet {
 
             ExchangeRate exchangeRate = exchangeRateRepository.findByCurrencyCodePair(base, target).orElseThrow(() -> new ExchangeRateDoesNotExistsException("Exchange rate with this code pair doesn't exists"));
             wrapResponse(resp, exchangeRate);
-        } catch (RequiredParamMissingException | IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             handler.handle(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         } catch (SQLException e) {
-            handler.handle(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Database is unavailable");
+            handler.handleSQLException(resp, e);
         } catch (NoSuchElementException e) {
             handler.handle(resp, HttpServletResponse.SC_NOT_FOUND, e.getMessage());
         }
@@ -59,10 +59,10 @@ public class ExchangeRateServlet extends HttpServlet {
             exchangeRate.setRate(BigDecimal.valueOf(Double.parseDouble(rate)));
             exchangeRateRepository.update(exchangeRate);
             wrapResponse(resp, exchangeRate);
-        } catch (RequiredParamMissingException | IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             handler.handle(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         } catch (SQLException e) {
-            handler.handle(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+            handler.handleSQLException(resp, e);
         } catch (NoSuchElementException e) {
             handler.handle(resp, HttpServletResponse.SC_NOT_FOUND, e.getMessage());
         }

@@ -45,10 +45,10 @@ public class ExchangeServlet extends HttpServlet {
             ).getRate();
             BigDecimal result = rate.multiply(convertedAmount);
             wrapResponse(resp, currencyRepository, baseCurrencyCode, targetCurrencyCode, rate, convertedAmount, result);
-        } catch (IllegalArgumentException | RequiredParamMissingException e) {
+        } catch (IllegalArgumentException e) {
             handler.handle(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         } catch (SQLException e) {
-            handler.handle(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+            handler.handleSQLException(resp, e);
         } catch (NoSuchElementException e) {
             handler.handle(resp, HttpServletResponse.SC_NOT_FOUND, e.getMessage());
         }

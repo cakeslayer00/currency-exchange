@@ -39,7 +39,7 @@ public class ExchangeRatesServlet extends HttpServlet {
                     .toList();
             resp.getWriter().write(new ObjectMapper().writeValueAsString(res));
         } catch (SQLException e) {
-            handler.handle(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+            handler.handleSQLException(resp, e);
         }
     }
 
@@ -63,10 +63,10 @@ public class ExchangeRatesServlet extends HttpServlet {
                     .rate(BigDecimal.valueOf(Double.parseDouble(rate)))
                     .build()
             );
-        } catch (IllegalArgumentException | RequiredParamMissingException e) {
+        } catch (IllegalArgumentException e) {
             handler.handle(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         } catch (SQLException e) {
-            handler.handle(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+            handler.handleSQLException(resp, e);
         } catch (CurrencyDoesNotExistsException e) {
             handler.handle(resp, HttpServletResponse.SC_NOT_FOUND, e.getMessage());
         }

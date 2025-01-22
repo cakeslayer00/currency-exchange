@@ -27,7 +27,7 @@ public class CurrenciesServlet extends HttpServlet {
             List<Currency> currencies = currencyRepository.findAll();
             resp.getWriter().write(new ObjectMapper().writeValueAsString(currencies));
         } catch (SQLException e) {
-            handler.handle(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Database is unavailable");
+            handler.handleSQLException(resp, e);
         }
     }
 
@@ -46,10 +46,10 @@ public class CurrenciesServlet extends HttpServlet {
                     .sign(sign)
                     .build()
             );
-        } catch (IllegalArgumentException | RequiredParamMissingException e) {
+        } catch (IllegalArgumentException e) {
             handler.handle(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         } catch (SQLException e) {
-            handler.handle(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+            handler.handleSQLException(resp, e);
         }
     }
 }
