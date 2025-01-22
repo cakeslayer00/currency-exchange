@@ -18,7 +18,11 @@ public class ExceptionHandler {
     }
 
     public void handleSQLException(HttpServletResponse resp, SQLException ex) throws IOException {
-        if (ex.getMessage().contains("[SQLITE_CONSTRAINT_UNIQUE]")) {
+        String message = ex.getMessage();
+        if (message.contains("[SQLITE_ERROR]")) {
+            handle(resp, HttpServletResponse.SC_CONFLICT,
+                    "Database is down:)");
+        } else if (message.contains("[SQLITE_CONSTRAINT_UNIQUE]")) {
             handle(resp, HttpServletResponse.SC_CONFLICT,
                     "Violation of unique constraint. Written field already exists.");
         } else {

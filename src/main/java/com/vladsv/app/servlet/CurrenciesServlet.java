@@ -40,6 +40,8 @@ public class CurrenciesServlet extends HttpServlet {
             String code = validator.getRequiredParameter(req.getParameter("code"));
             String sign = validator.getRequiredParameter(req.getParameter("sign"));
 
+            validator.checkCurrencyCode(code);
+
             currencyRepository.save(Currency.builder()
                     .name(name)
                     .code(code)

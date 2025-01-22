@@ -20,4 +20,10 @@ public class Validator {
                 () -> new CurrencyDoesNotExistsException("Currency with this code doesn't exist")
         );
     }
+
+    public void checkCurrencyCode(String code) {
+        if (!code.matches("[A-Z]{3}")) {
+            throw new IllegalArgumentException(String.format("Currency code %s is invalid", code));
+        }
+    }
 }
