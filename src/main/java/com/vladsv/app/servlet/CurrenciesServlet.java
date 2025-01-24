@@ -42,7 +42,7 @@ public class CurrenciesServlet extends HttpServlet {
             
             validator.checkCurrencyCode(code);
             validator.checkNameParameterLength(name);
-            validator.checkSignParameterLength(name);
+            validator.checkSignParameterLength(sign);
 
             currencyRepository.save(Currency.builder()
                     .name(name)
