@@ -51,8 +51,10 @@ public class ExchangeRatesServlet extends HttpServlet {
             String baseCurrencyCode = validator.getRequiredParameter(req.getParameter("baseCurrencyCode"));
             String targetCurrencyCode = validator.getRequiredParameter(req.getParameter("targetCurrencyCode"));
             String rate = validator.getRequiredParameter(req.getParameter("rate"));
+
             validator.checkCurrencyCode(baseCurrencyCode);
             validator.checkCurrencyCode(targetCurrencyCode);
+            validator.validateCurrencyPair(baseCurrencyCode, targetCurrencyCode);
 
             CurrencyRepository currencyRepository = new CurrencyRepository();
 
