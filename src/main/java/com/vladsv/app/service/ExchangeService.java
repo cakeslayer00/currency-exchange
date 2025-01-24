@@ -1,11 +1,11 @@
 package com.vladsv.app.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
 import com.vladsv.app.dto.ExchangeDto;
 import com.vladsv.app.model.ExchangeRate;
-import com.vladsv.app.repository.impl.CurrencyRepository;
-import com.vladsv.app.repository.impl.ExchangeRateRepository;
-import jakarta.servlet.http.HttpServletResponse;
+import com.vladsv.app.repository.CurrencyRepository;
+import com.vladsv.app.repository.ExchangeRateRepository;
 
 import java.io.IOException;
 import java.math.BigDecimal;

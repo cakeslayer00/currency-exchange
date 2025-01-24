@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="currency.db" uuid="cab1774c-c008-4fba-95f8-b9cdd837d378">
+    <data-source source="LOCAL" name="currency" uuid="baaaaa91-1e97-472d-88ef-8387d1182ccb">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/src/main/resources/currency.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:D:\IdeaProjects\demo\src\main\resources\currency.db</jdbc-url>
       <jdbc-additional-properties>
         <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />
       </jdbc-additional-properties>
       <working-dir>$ProjectFileDir$</working-dir>
+      <libraries>
+        <library>
+          <url>file://$MAVEN_REPOSITORY$/org/xerial/sqlite-jdbc/3.47.2.0/sqlite-jdbc-3.47.2.0.jar</url>
+        </library>
+      </libraries>
     </data-source>
   </component>
 </project>

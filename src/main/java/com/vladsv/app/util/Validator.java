@@ -3,7 +3,7 @@ package com.vladsv.app.util;
 import com.vladsv.app.exception.CurrencyDoesNotExistsException;
 import com.vladsv.app.exception.RequiredParamMissingException;
 import com.vladsv.app.model.Currency;
-import com.vladsv.app.repository.impl.CurrencyRepository;
+import com.vladsv.app.repository.CurrencyRepository;
 
 import java.sql.SQLException;
 

@@ -1,7 +1,7 @@
 package com.vladsv.app.dto;
 
-import com.vladsv.app.model.Currency;
 import lombok.*;
+import com.vladsv.app.model.Currency;
 
 import java.math.BigDecimal;
 

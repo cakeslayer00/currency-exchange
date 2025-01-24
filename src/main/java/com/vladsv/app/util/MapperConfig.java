@@ -2,7 +2,7 @@ package com.vladsv.app.util;
 
 import com.vladsv.app.dto.ExchangeRateDto;
 import com.vladsv.app.model.ExchangeRate;
-import com.vladsv.app.repository.impl.CurrencyRepository;
+import com.vladsv.app.repository.CurrencyRepository;
 import org.modelmapper.ModelMapper;
 
 import java.sql.SQLException;
