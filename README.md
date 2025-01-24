@@ -1,6 +1,6 @@
 # currency-exchange
 
-This project is all about currency and exchange rates. Basically simple crud of creating currency/exchange rate, with only bussiness logic being is ability to exchange some amount of money.
+This project is all about currency and exchange rates. Basically simple crud of creating currency/exchange rate, with only business logic being is ability to exchange some amount of money.
 
 Created this proj with sole purpose of discovering Java Servlets API, also implemented connection pool for database using HikariCP, database is SQLite.
 
@@ -26,8 +26,8 @@ That was pretty harsh, especially learning servlets and I think there is still m
 
 # How to install and run
 
-for now you can clone repo, install maven and tomcat and run :)
-I hope will come later and add docker compose with dockerfile, so it will be 2 commands or so. 
+for now, you can clone repo, install maven and tomcat and run :)
+I hope will come later and add docker compose with dockerfile, so it will be 2 commands or so.
 
 # How to use the project
 
@@ -138,7 +138,7 @@ To get specified exchange rate
 
 #### POST `/exchangeRates`
 
-To create a exchange rate. You must specify `baseCurrencyCode`, `targetCurrencyCode` and `rate` parameters.
+To create an exchange rate. You must specify `baseCurrencyCode`, `targetCurrencyCode` and `rate` parameters.
 You'll get 201 HTTP response code if successful
 
 #### PATCH `/exchangeRate/{exchange_rate}
@@ -160,7 +160,7 @@ To update an existing exchange rate. You must specify `rate` parameter
         "name": "Euro",
         "sign": "€"
     },
-    "rate": 22.22 ///here
+    "rate": 22.22
 }
 ```
 
@@ -192,6 +192,6 @@ To calculate final amount of money based on certain exchange rate. You need to s
 
 # Credits
 
-This project based on one of the from Sergey Zhukov's roadmap. 
+This project based on one of the from Sergey Zhukov's roadmap.
 Here's link:
 https://zhukovsd.github.io/java-backend-learning-course/projects/currency-exchange/
